@@ -37,6 +37,12 @@ givenName: opengate-admin
 sn: opengate-admin
 userPassword: opengate-admin
 
+# Grant administrator perms to opengate-admin user
+dn: olcDatabase={1}mdb,cn=config
+changetype: modify
+add: olcAccess
+olcAccess: {2}to * by dn="uid=opengate-admin,ou=serviceaccounts,ou=internal,dc=opengate,dc=io" manage
+
 # Create example user A
 description: Example user for opengate
 dn: uid=netty,ou=identities,dc=opengate,dc=io
