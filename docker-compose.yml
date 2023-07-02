@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  opengate:
+    container_name: OpenGate
+    image: local/opengate
+    build:
+      context: ./src/
+      dockerfile: ../docker/opengate/Dockerfile
+    ports:
+      - 80:80
+      - 443:443
