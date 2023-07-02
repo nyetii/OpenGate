@@ -1,0 +1,60 @@
+# Create the new organizational unit for internal objects 
+dn: ou=internal,dc=opengate,dc=io
+changetype: add
+ou: internal
+objectClass: organizationalUnit
+description: Default organizational unit for internal objects
+
+# Create the new organizational unit for example users
+dn: ou=identities,dc=opengate,dc=io
+changetype: add
+ou: identities
+objectClass: organizationalUnit
+description: Default organizational unit for example users
+
+# Create the new organizational unit for service accounts
+dn: ou=serviceaccounts,ou=internal,dc=opengate,dc=io
+changetype: add
+ou: serviceaccounts
+objectClass: organizationalUnit
+description: Default organizational unit for service accounts
+
+# Create the new organizational unit for session tokens
+dn: ou=tokens,ou=internal,dc=opengate,dc=io
+changetype: add
+ou: tokens
+objectClass: organizationalUnit
+description: Default organizational unit for session tokens
+
+# Create opengate admin user 
+description: Internal system user for opengate
+dn: uid=opengate-admin,ou=serviceaccounts,ou=internal,dc=opengate,dc=io
+changetype: add
+objectClass: inetOrgPerson
+cn: opengate-admin
+uid: opengate-admin
+givenName: opengate-admin
+sn: opengate-admin
+userPassword: opengate-admin
+
+# Create example user A
+description: Example user for opengate
+dn: uid=netty,ou=identities,dc=opengate,dc=io
+changetype: add
+objectClass: inetOrgPerson
+cn: netty
+uid: netty
+givenName: netty
+sn: netty
+userPassword: nettypassword
+
+# Create example user B
+description: Example user for opengate
+dn: uid=bart,ou=identities,dc=opengate,dc=io
+changetype: add
+objectClass: inetOrgPerson
+cn: bart
+uid: bart
+givenName: bart
+sn: bart
+userPassword: bartpassword

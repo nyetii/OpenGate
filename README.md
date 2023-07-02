@@ -5,7 +5,7 @@
 docker-compose -p "opengate-access-manager" -f docker-compose.yml up
 ```
 
-### How to rebuild
+### How to rebuild and deploy in dettached mode
 ```console
-docker-compose -f docker-compose.yml build
+docker-compose.exe -p "opengate-access-manager" -f docker-compose.yml up --build -d
 ```
