@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OpenGate.Models;
 using Microsoft.Extensions.Configuration;
+using OpenGate.Logging;
 
 namespace OpenGate.Controllers
 {
@@ -9,15 +10,17 @@ namespace OpenGate.Controllers
     [Route("opengate/rest/[controller]")]
     public class AuthController : ControllerBase
     {
+        private readonly LdapValidator _ldapValidator;
+
+        public AuthController(LdapValidator ldapValidator)
+        {
+            _ldapValidator = ldapValidator;
+        }
+
         [HttpPost(Name = "auth")]
         public ActionResult<AuthenticationResponse> Login([FromBody] AuthenticationPayload authentication)
         {
-            IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            bool result = LdapValidator.ValidateUserCredentials(configuration, authentication.username, authentication.password);
+            bool result = _ldapValidator.ValidateUserCredentials(authentication.username, authentication.password);
             return Ok(new {success = result});
         }
     }
