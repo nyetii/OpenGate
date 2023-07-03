@@ -80,17 +80,17 @@
 	"variable": [
 		{
 			"key": "openGateUrl",
-			"value": "http://localhost/opengate",
+			"value": "http://am.opengate.io/opengate",
 			"type": "string"
 		},
 		{
 			"key": "testUsername",
-			"value": "testuser",
+			"value": "netty",
 			"type": "string"
 		},
 		{
 			"key": "testPassword",
-			"value": "testpassword",
+			"value": "nettypassword",
 			"type": "string"
 		}
 	]
