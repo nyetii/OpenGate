@@ -2,7 +2,7 @@ version: '3'
 
 services:
   opengate:
-    container_name: OpenGate
+    container_name: am.opengate.io
     image: local/opengate
     build:
       context: ./src/
@@ -13,7 +13,7 @@ services:
       - 80:80
       - 443:443
   openldap:
-    container_name: OpenLDAP
+    container_name: ldap.opengate.io
     image: osixia/openldap:1.5.0
     build:
       context: ./docker/ldap-db
