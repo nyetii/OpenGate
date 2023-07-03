@@ -2,13 +2,15 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
+EXPOSE 80
+EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["OpenGate/OpenGate.csproj", "OpenGate/"]
-RUN dotnet restore "OpenGate/OpenGate.csproj"
+COPY ["src/OpenGate/OpenGate.csproj", "src/OpenGate/"]
+RUN dotnet restore "src/OpenGate/OpenGate.csproj"
 COPY . .
-WORKDIR "/src/OpenGate"
+WORKDIR "/src/src/OpenGate"
 RUN dotnet build "OpenGate.csproj" -c Release -o /app/build
 
 FROM build AS publish

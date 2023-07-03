@@ -1,17 +1,12 @@
-version: '3'
+version: '3.4'
 
 services:
   opengate:
     container_name: am.opengate.io
     image: local/opengate
     build:
-      context: ./src/
-      dockerfile: ../docker/opengate/Dockerfile
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-    ports:
-      - 80:80
-      - 443:443
+      context: .
+      dockerfile: src/OpenGate/Dockerfile
   openldap:
     container_name: ldap.opengate.io
     image: osixia/openldap:1.5.0
