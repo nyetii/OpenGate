@@ -9,3 +9,8 @@ docker-compose -p "opengate-access-manager" -f docker-compose.yml up
 ```console
 docker-compose.exe -p "opengate-access-manager" -f docker-compose.yml up --build -d
 ```
+
+### How to rebuild OpenGate changes only
+```console
+docker-compose.exe -p "opengate-access-manager" -f docker-compose.yml up --build --force-recreate opengate -d
+```
