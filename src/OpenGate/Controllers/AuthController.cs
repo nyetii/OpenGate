@@ -4,10 +4,10 @@ using OpenGate.Models;
 namespace OpenGate.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class TestController : ControllerBase
+    [Route("opengate/rest/[controller]")]
+    public class AuthController : ControllerBase
     {
-        [HttpGet(Name = "GetTest")]
+        [HttpGet(Name = "GetAuth")]
         public IActionResult Get()
         {
             var user = new User("opengate.io")
