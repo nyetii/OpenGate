@@ -2,19 +2,29 @@
 using System.DirectoryServices.ActiveDirectory;
 using System.Xml.Linq;
 using Microsoft.Extensions.Configuration;
+using OpenGate.Logging;
 
 namespace OpenGate.Models
 {
-    public static class LdapValidator
+    public class LdapValidator
     {
-        public static bool ValidateUserCredentials(IConfiguration configuration, string username, string password)
+        private readonly IConfiguration _configuration;
+        private readonly ILog _log;
+
+        public LdapValidator(IConfiguration configuration, ILog log)
+        {
+            _configuration = configuration;
+            _log = log;
+        }
+
+        public bool ValidateUserCredentials(string username, string password)
         {
             try
             {
-                string? ldapServer = configuration["LdapConfiguration:Server"];
-                string? ldapPort = configuration["LdapConfiguration:Port"];
-                string? baseDn = configuration["LdapConfiguration:BaseDN"];
-                bool.TryParse(configuration["LdapConfiguration:UseSSL"], out bool useSSL);
+                string? ldapServer = _configuration["LdapConfiguration:Server"];
+                string? ldapPort = _configuration["LdapConfiguration:Port"];
+                string? baseDn = _configuration["LdapConfiguration:BaseDN"];
+                bool.TryParse(_configuration["LdapConfiguration:UseSSL"], out bool useSSL);
 
                 if (ldapServer is null || ldapPort is null || baseDn is null)
                 {
@@ -24,11 +34,13 @@ namespace OpenGate.Models
                 using var connection = new LdapConnection { SecureSocketLayer = useSSL };
                 connection.Connect(ldapServer, int.TryParse(ldapPort, out int parsedPort) ? parsedPort : 389);
                 connection.Bind($"uid={username},ou=identities,{baseDn}", password);
+
+                _log.Information(connection.Bound ? $"{username} successfully authenticated!" : $"{username} has not been authenticated.");
                 return connection.Bound;
             }
             catch (LdapException ex)
             {
-                Console.WriteLine(ex);
+                _log.Error(ex.ToString());
                 return false;
             }
         }
