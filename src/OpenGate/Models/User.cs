@@ -13,6 +13,8 @@
 
         public string FullId => $"{Name}@{Domain}";
 
+        public bool IsValid { get; set; }
+
         public User(string domain, int port = 389)
         {
             SubDomains = domain.Split('.');

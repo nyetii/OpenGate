@@ -6,7 +6,7 @@ namespace OpenGate.Models
 {
     public static class UserExtensions
     {
-        public static bool Validate(this User user, string password)
+        public static void Validate(this User user, string password)
         {
             try
             {
@@ -15,12 +15,12 @@ namespace OpenGate.Models
                 connection.Connect("openldap", user.Port);
                 connection.Bind(user.DomainName, password);
 
-                return connection.Bound;
+                user.IsValid = connection.Bound;
             }
             catch (LdapException ex)
             {
                 Console.WriteLine(ex);
-                return false;
+                user.IsValid = false;
             }
         }
 

@@ -15,13 +15,29 @@ namespace OpenGate.Controllers
                 Name = "netty"
             };
 
-            var isValid = user.Validate("nettypassword");
+            user.Validate("nettypassword");
 
-            if(isValid)
+            if(user.IsValid)
                 return Ok(user);
 
             return NotFound(user);
             
+        }
+
+        [HttpPost(Name = "PostAuth")]
+        public ActionResult<bool> Login([FromBody] Authentication authentication)
+        {
+            var result = new User("opengate.io")
+            {
+                Name = authentication.username
+            };
+
+            result.Validate(authentication.password);
+
+            if (result.IsValid) 
+                return Ok(new {success = true});
+            
+            return BadRequest(new { success = false });
         }
     }
 }
