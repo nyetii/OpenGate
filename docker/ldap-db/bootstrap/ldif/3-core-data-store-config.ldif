@@ -1,0 +1,19 @@
+# Create the new organizational unit for LDAP identities storage config
+dn: ou=OpenGateLdapIdentityStorage,ou=services,ou=opengate-config,ou=internal,dc=opengate,dc=io
+changetype: add
+ou: OpenGateLdapIdentityStorage
+objectClass: organizationalUnit
+description: Default organizational unit for LDAP identities storage config
+
+# Create the config object for LDAP identities storage
+dn: ou=config,ou=OpenGateLdapIdentityStorage,ou=services,ou=opengate-config,ou=internal,dc=opengate,dc=io
+changetype: add
+ou: config
+objectClass: organizationalUnit
+objectClass: svcfAttributableStore
+svcfAttribute: opengate-identity-store-host=ldap.opengate.io
+svcfAttribute: opengate-identity-store-port=389
+svcfAttribute: opengate-identity-store-tls=false
+svcfAttribute: opengate-identity-store-basedn=dc=opengate,dc=io
+svcfAttribute: opengate-identity-store-admin-username=opengate-admin
+svcfAttribute: opengate-identity-store-admin-password=opengate-admin

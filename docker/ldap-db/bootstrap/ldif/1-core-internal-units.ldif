@@ -1,0 +1,34 @@
+# Create the new organizational unit for internal objects 
+dn: ou=internal,dc=opengate,dc=io
+changetype: add
+ou: internal
+objectClass: organizationalUnit
+description: Default organizational unit for internal objects
+
+# Create the new organizational unit for service accounts
+dn: ou=serviceaccounts,ou=internal,dc=opengate,dc=io
+changetype: add
+ou: serviceaccounts
+objectClass: organizationalUnit
+description: Default organizational unit for service accounts
+
+# Create the new organizational unit for session tokens
+dn: ou=tokens,ou=internal,dc=opengate,dc=io
+changetype: add
+ou: tokens
+objectClass: organizationalUnit
+description: Default organizational unit for session tokens
+
+# Create the new organizational unit for configurations 
+dn: ou=opengate-config,ou=internal,dc=opengate,dc=io
+changetype: add
+ou: opengate-config
+objectClass: organizationalUnit
+description: Default organizational unit for configurations
+
+# Create the new organizational unit for opengate services
+dn: ou=services,ou=opengate-config,ou=internal,dc=opengate,dc=io
+changetype: add
+ou: services
+objectClass: organizationalUnit
+description: Default organizational unit for opengate services
