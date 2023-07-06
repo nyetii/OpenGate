@@ -34,7 +34,7 @@ namespace OpenGate.Models
                 using var connection = new LdapConnection { SecureSocketLayer = useSSL };
                 connection.Connect(ldapServer, int.TryParse(ldapPort, out int parsedPort) ? parsedPort : 389);
                 connection.Bind($"uid={username},ou=identities,{baseDn}", password);
-
+                
                 _log.Information(connection.Bound ? $"{username} successfully authenticated!" : $"{username} has not been authenticated.");
                 return connection.Bound;
             }
