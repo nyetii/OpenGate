@@ -21,7 +21,7 @@ namespace OpenGate.Ldap
             _password = password;
         }
 
-        public LdapConnection? GetConnection()
+        public LdapConnection GetConnection()
         {
             if (_connections.TryTake(out var connection))
             {
@@ -30,7 +30,8 @@ namespace OpenGate.Ldap
                     try
                     {
                         connection.Connect(_host, _port);
-                        connection.Bind(_username, _password);
+                        if (_username != string.Empty || _password != string.Empty)
+                            connection.Bind(_username, _password);
                     }
                     catch (LdapException ex)
                     {
@@ -57,20 +58,19 @@ namespace OpenGate.Ldap
             }
         }
 
-        private LdapConnection? CreateNewConnection()
+        private LdapConnection CreateNewConnection()
         {
             var connection = new LdapConnection();
             try
             {
                 connection.Connect(_host, _port);
-                connection.Bind(_username, _password);
+                if (_username != string.Empty || _password != string.Empty)
+                    connection.Bind(_username, _password);
                 _connections.Add(connection);
             }
             catch (LdapException ex)
             {
-                Console.WriteLine($"Failed to create a new LDAP connection: {ex.Message}");
-                connection.Dispose();
-                connection = null;
+                throw new Exception($"Failed to create a new LDAP connection: {ex.Message}");
             }
 
             return connection;
