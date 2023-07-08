@@ -1,4 +1,4 @@
-namespace LdapUtils
+namespace OpenGate.Ldap
 {
     public class LdapManagerException : Exception
     {

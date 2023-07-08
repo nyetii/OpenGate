@@ -2,7 +2,7 @@ using Novell.Directory.Ldap;
 using System;
 using System.Collections.Concurrent;
 
-namespace LdapUtils
+namespace OpenGate.Ldap
 {
     public class LdapConnectionPool
     {

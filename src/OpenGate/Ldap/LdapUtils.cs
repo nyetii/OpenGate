@@ -1,18 +1,19 @@
+using LdapUtils;
 using Novell.Directory.Ldap;
 
-namespace LdapUtils
+namespace OpenGate.Ldap
 {
     public class LdapManager
     {
         private string baseDn;
         private bool secure;
-        private HashSet<String> servers;
+        private HashSet<string> servers;
 
-        public LdapManager(string host, int port, bool secure, string baseDn) : this(new HashSet<String> { $"{host}:{port}" }, secure, baseDn)
+        public LdapManager(string host, int port, bool secure, string baseDn) : this(new HashSet<string> { $"{host}:{port}" }, secure, baseDn)
         {
         }
 
-        public LdapManager(HashSet<String> servers, bool secure, string baseDn)
+        public LdapManager(HashSet<string> servers, bool secure, string baseDn)
         {
             this.servers = servers;
             this.secure = secure;

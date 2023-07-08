@@ -2,6 +2,7 @@
 using OpenGate.Models;
 using Microsoft.Extensions.Configuration;
 using OpenGate.Logging;
+using OpenGate.Ldap;
 
 namespace OpenGate.Controllers
 {

@@ -1,6 +1,6 @@
 ﻿using NLog;
+using OpenGate.Ldap;
 using OpenGate.Logging;
-using OpenGate.Models;
 using ILog = OpenGate.Logging.ILog;
 
 namespace OpenGate.Services
