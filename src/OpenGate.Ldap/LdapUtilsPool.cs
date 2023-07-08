@@ -6,31 +6,31 @@ namespace OpenGate.Ldap
 {
     public class LdapConnectionPool
     {
-        private ConcurrentBag<LdapConnection> connections;
-        private string host;
-        private int port;
-        private string username;
-        private string password;
+        private readonly ConcurrentBag<LdapConnection> _connections;
+        private readonly string _host;
+        private readonly int _port;
+        private readonly string _username;
+        private readonly string _password;
 
         public LdapConnectionPool(string host, int port, string username, string password)
         {
-            connections = new ConcurrentBag<LdapConnection>();
-            this.host = host;
-            this.port = port;
-            this.username = username;
-            this.password = password;
+            _connections = new ConcurrentBag<LdapConnection>();
+            _host = host;
+            _port = port;
+            _username = username;
+            _password = password;
         }
 
-        public LdapConnection GetConnection()
+        public LdapConnection? GetConnection()
         {
-            if (connections.TryTake(out LdapConnection connection))
+            if (_connections.TryTake(out var connection))
             {
                 if (!connection.Connected)
                 {
                     try
                     {
-                        connection.Connect(host, port);
-                        connection.Bind(username, password);
+                        connection.Connect(_host, _port);
+                        connection.Bind(_username, _password);
                     }
                     catch (LdapException ex)
                     {
@@ -49,22 +49,22 @@ namespace OpenGate.Ldap
             return CreateNewConnection();
         }
 
-        public void ReleaseConnection(LdapConnection connection)
+        public void ReleaseConnection(LdapConnection? connection)
         {
-            if (connection != null && connection.Connected)
+            if (connection is { Connected: true })
             {
-                connections.Add(connection);
+                _connections.Add(connection);
             }
         }
 
-        private LdapConnection CreateNewConnection()
+        private LdapConnection? CreateNewConnection()
         {
-            LdapConnection connection = new LdapConnection();
+            var connection = new LdapConnection();
             try
             {
-                connection.Connect(host, port);
-                connection.Bind(username, password);
-                connections.Add(connection);
+                connection.Connect(_host, _port);
+                connection.Bind(_username, _password);
+                _connections.Add(connection);
             }
             catch (LdapException ex)
             {
@@ -78,7 +78,7 @@ namespace OpenGate.Ldap
 
         public void Dispose()
         {
-            foreach (LdapConnection connection in connections)
+            foreach (var connection in _connections)
             {
                 connection.Dispose();
             }

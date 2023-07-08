@@ -1,5 +1,4 @@
 ﻿using Novell.Directory.Ldap;
-using System.DirectoryServices.ActiveDirectory;
 using System.Xml.Linq;
 using Microsoft.Extensions.Configuration;
 using OpenGate.Logging;

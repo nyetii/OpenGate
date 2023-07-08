@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OpenGate.Ldap\OpenGate.Ldap.csproj" />
     <ProjectReference Include="..\OpenGate.Logging\OpenGate.Logging.csproj" />
   </ItemGroup>
 

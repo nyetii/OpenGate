@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenGate", "src\OpenGate\Op
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{7CB18114-F2E9-4811-8758-D5E3845BB123}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGate.Logging", "src\OpenGate.Logging\OpenGate.Logging.csproj", "{EA5CC8A9-BE67-4A48-822C-E3AA800DD2CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenGate.Logging", "src\OpenGate.Logging\OpenGate.Logging.csproj", "{EA5CC8A9-BE67-4A48-822C-E3AA800DD2CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGate.Ldap", "src\OpenGate.Ldap\OpenGate.Ldap.csproj", "{55403D5F-25C4-46A4-A8F3-0036157CDBFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{EA5CC8A9-BE67-4A48-822C-E3AA800DD2CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA5CC8A9-BE67-4A48-822C-E3AA800DD2CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA5CC8A9-BE67-4A48-822C-E3AA800DD2CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55403D5F-25C4-46A4-A8F3-0036157CDBFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55403D5F-25C4-46A4-A8F3-0036157CDBFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55403D5F-25C4-46A4-A8F3-0036157CDBFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55403D5F-25C4-46A4-A8F3-0036157CDBFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
