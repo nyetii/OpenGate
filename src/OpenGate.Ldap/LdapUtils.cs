@@ -55,7 +55,7 @@ namespace OpenGate.Ldap
             try
             {
                 connection = GetConnectionFromPool();
-                var dn = $"uid={userDn},*ou=identities,{Ldap.BaseDn}";
+                var dn = $"uid={userDn},ou=identities,{Ldap.BaseDn}";
                 connection.Bind(dn, password);
                 authenticated = connection.Bound;
             }
