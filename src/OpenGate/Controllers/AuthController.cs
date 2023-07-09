@@ -11,18 +11,37 @@ namespace OpenGate.Controllers
     [Route("opengate/rest/[controller]")]
     public class AuthController : ControllerBase
     {
+        private readonly ILog _log;
         private readonly LdapValidator _ldapValidator;
-
-        public AuthController(LdapValidator ldapValidator)
+        private readonly Ldap.LdapService _ldap;
+        public AuthController(LdapValidator ldapValidator, Ldap.LdapService ldap, ILog log)
         {
             _ldapValidator = ldapValidator;
+            _ldap = ldap;
+            _log = log;
         }
 
         [HttpPost(Name = "auth")]
         public ActionResult<AuthenticationResponse> Login([FromBody] AuthenticationPayload authentication)
         {
-            bool result = _ldapValidator.ValidateUserCredentials(authentication.username, authentication.password);
-            return Ok(new {success = result});
+            if (Request.Cookies["opengatesession"] != null)
+            {
+                //Request.Cookies.TryGetValue("opengatesession", out var value);
+                var cookie = Request.Cookies["opengatesession"];
+
+                return Ok(new { success = true });
+            }
+
+            try
+            {
+                var result = _ldap.Utils.Authenticate(authentication.username, authentication.password);
+                return Ok(new { success = result });
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.ToString());
+                return BadRequest(new { success = false });
+            }
         }
     }
 }

@@ -1,57 +1,48 @@
 using Novell.Directory.Ldap;
+using OpenGate.Logging;
 
 namespace OpenGate.Ldap
 {
     public class LdapUtils
     {
-        private readonly string _baseDn;
-        private readonly bool _secure;
-        private readonly HashSet<string> _servers;
-        private string adminBindDn = string.Empty;
-        private string adminBindpasswd = string.Empty;
+        public LdapService Ldap { get; set; }
+
+        private ILog _log;
+
+        public string AdminBindDn { get; set; } = string.Empty;
+        public string AdminBindpasswd { get; set; } = string.Empty;
+
         private LdapConnectionPool? _connectionPool;
         private LdapConnectionPool? _adminConnectionPool;
-
-        public LdapUtils(string host, int port, bool secure, string baseDn) : this(new HashSet<string> { $"{host}:{port}" }, secure, baseDn)
+        
+        public LdapUtils(ILog log, LdapService ldap)
         {
-        }
-
-        public LdapUtils(HashSet<string> servers, bool secure, string baseDn)
-        {
-            _servers = servers;
-            _secure = secure;
-            _baseDn = baseDn;
-
-            if (baseDn == string.Empty || baseDn.Length < 1)
-            {
-                throw new LdapManagerException("Invalid baseDN");
-            }
+            Ldap = ldap;
+            _log = log;
         }
 
         public LdapConnectionPool CreateConnectionPool(string bindDn, string bindpasswd)
         {
-            string[] hostPort = _servers.First().Split(":");
+            string[] hostPort = Ldap.Servers.First().Split(":");
             LdapConnectionPool connectionPool = new LdapConnectionPool(hostPort[0], int.Parse(hostPort[1]), bindDn, bindpasswd);
             return connectionPool;
         }
 
-        public LdapConnection GetConnectionFromPool()
+        public LdapConnection GetConnectionFromPool(bool isAdmin = false)
         {
+            //var bindDn = isAdmin ? adminBindDn : string.Empty;
+            //var bindpasswd = isAdmin ? adminBindpasswd : string.Empty;
 
-            if (_connectionPool == null)
-            {
-                _connectionPool = CreateConnectionPool(string.Empty, string.Empty);
-            }
+            (string bindDn, string bindpasswd) = isAdmin ? (AdminBindDn, AdminBindpasswd) : (string.Empty, string.Empty);
+            
+            _connectionPool ??= CreateConnectionPool(bindDn, bindpasswd);
 
             return _connectionPool.GetConnection();
         }
 
         public LdapConnection GetAdminConnectionFromPool()
         {
-            if (_adminConnectionPool == null)
-            {
-                _adminConnectionPool = CreateConnectionPool(adminBindDn, adminBindpasswd);
-            }
+            _adminConnectionPool ??= CreateConnectionPool(AdminBindDn, AdminBindpasswd);
 
             return _adminConnectionPool.GetConnection();
         }
@@ -59,13 +50,18 @@ namespace OpenGate.Ldap
         public bool Authenticate(string userDn, string password)
         {
             LdapConnection? connection = null;
-            bool authenticated = false;
+            bool authenticated;
 
             try
             {
                 connection = GetConnectionFromPool();
-                connection.Bind($"{userDn},{_baseDn}", password);
+                var dn = $"uid={userDn},*ou=identities,{Ldap.BaseDn}";
+                connection.Bind(dn, password);
                 authenticated = connection.Bound;
+            }
+            catch (LdapException ex) when (ex.Message is "Invalid Credentials")
+            {
+                authenticated = false;
             }
             finally
             {
@@ -75,10 +71,10 @@ namespace OpenGate.Ldap
             return authenticated;
         }
 
-        public Dictionary<string, string> searchIdentityStoreConfiguration()
+        public Dictionary<string, string> SearchIdentityStoreConfiguration()
         {
             LdapConnection? connection = null;
-            string searchBaseDn = $"{LdapUtilsConstants.IdentityStoreConnectionConfigDn},{this._baseDn}";
+            string searchBaseDn = $"{Ldap.IdentityStorage},{Ldap.BaseDn}";
             string searchFilter = "(objectClass=svcfAttributableStore)";
             string[] attributes = { "svcfAttribute" };
 
@@ -106,19 +102,7 @@ namespace OpenGate.Ldap
                 _adminConnectionPool?.ReleaseConnection(connection);
             }
         }
-
-        public string AdminBindDn
-        {
-            get { return adminBindDn; }
-            set { adminBindDn = value; }
-        }
-
-        public string AdminBindpasswd
-        {
-            get { return adminBindpasswd; }
-            set { adminBindpasswd = value; }
-        }
-
+        
         public Dictionary<string, string> AttributeToDictionary(IEnumerable<string> input)
         {
             var dictionary = new Dictionary<string, string>();

@@ -16,7 +16,14 @@ namespace OpenGate.Services
 
         public static void ConfigureLdapService(this IServiceCollection services)
         {
-            services.AddSingleton<LdapManager>();
+            //services.AddSingleton<LdapManager>();
+            services.AddSingleton<Ldap.LdapService>(x =>
+            {
+                var config = x.GetRequiredService<IConfiguration>();
+
+                return new Ldap.LdapService(config["LdapConfiguration:Server"], int.Parse(config["LdapConfiguration:Port"]),
+                    bool.Parse(config["LdapConfiguration:UseSSL"]), config["LdapConfiguration:BaseDN"], x.GetRequiredService<ILog>());
+            });
             services.AddSingleton(x => 
                 new LdapValidator(
                     x.GetRequiredService<IConfiguration>(),
