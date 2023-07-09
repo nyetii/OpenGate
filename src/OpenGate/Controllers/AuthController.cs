@@ -12,11 +12,9 @@ namespace OpenGate.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ILog _log;
-        private readonly LdapValidator _ldapValidator;
-        private readonly Ldap.LdapService _ldap;
-        public AuthController(LdapValidator ldapValidator, Ldap.LdapService ldap, ILog log)
+        private readonly LdapService _ldap;
+        public AuthController(LdapService ldap, ILog log)
         {
-            _ldapValidator = ldapValidator;
             _ldap = ldap;
             _log = log;
         }
